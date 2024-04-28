@@ -5,15 +5,15 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   image: { type: String },
-  DOB: { type: Date, required: true },
+  DOB: { type: Date },
   uploads: [
     {
-      id: { type: String, required: true, unique: true },
-      // uploadedAt,size,likes,dislikes
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Media",
     },
   ],
 });
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User;
+export default User;
