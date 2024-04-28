@@ -5,6 +5,8 @@ import crypto from "crypto";
 import { Request, Response, NextFunction } from "express";
 
 import authRoutes from "./routes/auth.route";
+import imgRoutes from "./routes/images.route";
+import videoRoutes from "./routes/videos.route";
 
 dotenv.config();
 
@@ -31,6 +33,8 @@ app.listen(3000, () => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/image", imgRoutes);
+app.use("/api/video", videoRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const statusCode = err.statusCode || 500;

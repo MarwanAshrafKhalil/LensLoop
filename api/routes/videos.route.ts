@@ -16,3 +16,4 @@ router.post("/getAll", getVideos);
 router.post("/upload", authJWT, uploadVideo);
 router.post("/delete", authJWT, deleteVideo);
 router.post("/update", authJWT, updateVideo);
+export default router;

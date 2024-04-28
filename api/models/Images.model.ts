@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const imageSchema = new mongoose.Schema({
-  title: {
+  caption: {
     type: String,
     required: true,
   },
@@ -26,5 +26,4 @@ const imageSchema = new mongoose.Schema({
 });
 
 const Image = mongoose.model("Image", imageSchema);
-
-module.exports = Image;
+export default Image;
