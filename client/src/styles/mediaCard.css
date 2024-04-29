@@ -1,0 +1,18 @@
+.mediaCard {
+  @apply rounded-xl max-w-xl flex-col  shadow-md;
+}
+
+.mediaCard_mediaData {
+  @apply flex-col  justify-center items-center;
+}
+
+.mediaCard_image {
+  @apply w-full h-full mb-5 rounded-t-xl;
+}
+.mediaCard_span {
+  @apply text-center font-semibold mx-5 justify-center;
+}
+
+.mediaCard_actions {
+  @apply text-2xl gap-10  flex mx-2 my-5 w-full justify-center;
+}
