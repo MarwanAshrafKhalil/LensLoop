@@ -1,0 +1,10 @@
+header {
+  @apply bg-white w-full h-24 shadow-md flex;
+}
+.header_logo {
+  @apply h-16 w-24;
+}
+
+nav {
+  @apply mx-auto flex max-w-7xl items-center  p-6 lg:px-8;
+}
