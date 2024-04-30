@@ -1,0 +1,11 @@
+.uploadButton {
+  @apply bg-blue-500 w-20 h-20 m-6 z-10 bottom-0 right-0  hover:bg-blue-600 text-white py-2 px-4 rounded-full fixed  focus:outline-none;
+}
+
+.uploadButton_icon {
+  @apply p-3 w-full h-full;
+}
+
+.uploadMenu_Button {
+  @apply bg-blue-500 w-16 h-16  hover:bg-blue-600 text-white p-1 rounded-full mb-4 focus:outline-none;
+}

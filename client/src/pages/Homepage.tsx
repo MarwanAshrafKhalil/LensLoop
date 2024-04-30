@@ -1,19 +1,24 @@
 import MediaCard from "../components/MediaCard";
+import UploadMenu from "../components/UploadMenu";
 import "../styles/homepage.css";
 
 export default function Homepage() {
   return (
-    <div className="homepage">
-      <MediaCard />
-      <MediaCard />
-      <MediaCard />
-      <MediaCard />
-      <MediaCard />
-      <MediaCard />
-      <MediaCard />
-      <MediaCard />
-      <MediaCard />
-      <MediaCard />
-    </div>
+    <>
+      <UploadMenu />
+
+      <div className="homepage">
+        <MediaCard />
+        <MediaCard />
+        <MediaCard />
+        <MediaCard />
+        <MediaCard />
+        <MediaCard />
+        <MediaCard />
+        <MediaCard />
+        <MediaCard />
+        <MediaCard />
+      </div>
+    </>
   );
 }
