@@ -5,7 +5,10 @@ const videoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
+  videoName: {
+    type: String,
+    required: true,
+  },
   videoUrl: {
     type: String,
     required: true,
@@ -21,6 +24,7 @@ const videoSchema = new mongoose.Schema({
   },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   createdAt: {
     type: Date,
     default: Date.now,

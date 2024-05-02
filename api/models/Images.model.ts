@@ -5,7 +5,10 @@ const imageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
+  imageName: {
+    type: String,
+    required: true,
+  },
   imageUrl: {
     type: String,
     required: true,
@@ -21,6 +24,7 @@ const imageSchema = new mongoose.Schema({
   },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   createdAt: {
     type: Date,
     default: Date.now,
