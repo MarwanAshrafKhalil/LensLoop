@@ -1,10 +1,10 @@
+import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
 import { JWT_SECRET } from "..";
 import { errorHandler } from "./error";
 
 interface AuthenticatedReq extends Request {
-  user?: JwtPayload;
+  userId?: JwtPayload;
 }
 
 export const authJWT = (
@@ -19,12 +19,22 @@ export const authJWT = (
   }
 
   jwt.verify(token, JWT_SECRET, (err: any, decodedToken: any) => {
-    console.log("decodeD: ", decodedToken);
-    if (err || !decodedToken) {
-      return errorHandler(403, "Failed to authenticate token");
+    if (err) {
+      // Check for specific error cases
+      if (err.name === "TokenExpiredError") {
+        return next(errorHandler(403, "Token expired"));
+      } else {
+        return next(errorHandler(403, "Failed to authenticate token"));
+      }
     }
 
-    req.user = decodedToken;
+    // If decodedToken is falsy, jwt.verify failed to decode the token
+    if (!decodedToken) {
+      return next(errorHandler(403, "Failed to decode token"));
+    }
+
+    console.log("decodedToken: ", decodedToken);
+    req.userId = decodedToken.id;
     next();
   });
 };

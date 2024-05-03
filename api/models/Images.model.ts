@@ -5,13 +5,16 @@ const imageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+    default: "image",
+  },
   imageName: {
     type: String,
     required: true,
   },
-  imageUrl: {
+  Url: {
     type: String,
-    required: true,
   },
   format: {
     type: String,

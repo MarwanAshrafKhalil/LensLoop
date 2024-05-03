@@ -1,10 +1,10 @@
 import bcryptjs from "bcryptjs";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
 
+import { JWT_SECRET } from "..";
 import User from "../models/Users.model";
 import { errorHandler } from "../utils/error";
-import { JWT_SECRET } from "..";
 
 export function test(req: Request, res: Response) {
   res.json({
@@ -39,12 +39,10 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
   const { username, password } = req.body;
   try {
     const validUser = await User.findOne({ username });
-    console.log("validuser: ", validUser);
     if (!validUser) return next(errorHandler(404, "User not found"));
     const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) return next(errorHandler(401, "Wrong credentials"));
     const token = jwt.sign({ id: validUser._id }, JWT_SECRET);
-
     const { password: hashedPassword, ...rest } = validUser.toObject();
     const expiryDate = new Date(Date.now() + 3600000);
     res

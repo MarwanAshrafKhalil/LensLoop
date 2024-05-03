@@ -1,11 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-import { errorHandler } from "../utils/error";
+import { NextFunction, Request, Response } from "express";
 import Image from "../models/Images.model";
-import { JwtPayload } from "jsonwebtoken";
 import Video from "../models/Videos.model";
+import { errorHandler } from "../utils/error";
 
 interface AuthenticatedReq extends Request {
-  user?: JwtPayload;
+  userId?: string;
 }
 
 export async function likeMedia(
@@ -13,54 +12,47 @@ export async function likeMedia(
   res: Response,
   next: NextFunction
 ) {
-  const mediaId = req.params.MediaId;
-  const userId = req.user?._id;
-  const type = req.body.MediaType;
+  const userId = req.userId;
+  const { mediaId, type } = req.body;
+
+  console.log(req.body);
 
   try {
-    if (type === "image") {
-      const image = await Image.findById(mediaId);
-      if (image?.likes.includes(userId)) {
-        Image.updateOne(
-          { _id: mediaId },
-          { $pull: { likes: userId } },
-          (err: any) => {
-            if (err) {
-              return next(err);
-            } else {
-              return res
-                .status(200)
-                .json({ message: "User interaction is removed." });
-            }
-          }
-        );
-      }
-      image?.likes.push(userId);
-      await image?.save();
-      res.json({ message: "Image is liked successfully." });
-    } else if (type === "video") {
-      const video = await Video.findById(mediaId);
-      if (video?.likes.includes(userId)) {
-        Video.updateOne(
-          { _id: mediaId },
-          { $pull: { likes: userId } },
-          (err: any) => {
-            if (err) {
-              return next(err);
-            } else {
-              return res
-                .status(200)
-                .json({ message: "User interaction is removed." });
-            }
-          }
-        );
-      }
-      video?.likes.push(userId);
-      await video?.save();
-      res.json({ message: "Video liked successfully." });
-    } else {
-      return errorHandler(404, "Media type not valid.");
+    let media: any = "";
+
+    if (!userId) {
+      return next(errorHandler(401, "User not authenticated."));
     }
+
+    if (type === "image") {
+      media = await Image.findById(mediaId);
+    } else if (type === "video") {
+      media = await Video.findById(mediaId);
+    } else {
+      return next(errorHandler(404, "Can't find media."));
+    }
+
+    const userFound = media?.likes.includes(userId);
+    const updateDB = {
+      request: userFound ? "$pull" : "$push",
+      message: userFound
+        ? " User interaction is removed."
+        : " User interaction is added.",
+    };
+
+    const updateOperation = { [updateDB.request]: { likes: userId } };
+
+    const result = await (type === "image" ? Image : Video).updateOne(
+      { _id: mediaId },
+      updateOperation
+    );
+    if (result.modifiedCount === 0) {
+      return next(
+        errorHandler(404, "Media not found or user interaction not modified.")
+      );
+    }
+
+    return res.status(200).json({ result });
   } catch (error) {
     next(error);
   }
@@ -71,54 +63,45 @@ export async function dislikeMedia(
   res: Response,
   next: NextFunction
 ) {
-  const mediaId = req.params.MediaId;
-  const userId = req.user?._id;
-  const type = req.body.MediaType;
+  const userId = req.userId;
+  const { mediaId, type } = req.body;
 
   try {
-    if (type === "image") {
-      const image = await Image.findById(mediaId);
-      if (image?.dislikes.includes(userId)) {
-        Image.updateOne(
-          { _id: mediaId },
-          { $pull: { likes: userId } },
-          (err: any) => {
-            if (err) {
-              return next(err);
-            } else {
-              return res
-                .status(200)
-                .json({ message: "User interaction is removed." });
-            }
-          }
-        );
-      }
-      image?.likes.push(userId);
-      await image?.save();
-      res.json({ message: "Image is disliked successfully." });
-    } else if (type === "video") {
-      const video = await Video.findById(mediaId);
-      if (video?.likes.includes(userId)) {
-        Video.updateOne(
-          { _id: mediaId },
-          { $pull: { likes: userId } },
-          (err: any) => {
-            if (err) {
-              return next(err);
-            } else {
-              return res
-                .status(200)
-                .json({ message: "User interaction removed" });
-            }
-          }
-        );
-      }
-      video?.likes.push(userId);
-      await video?.save();
-      res.json({ message: "Video is liked successfully." });
-    } else {
-      return errorHandler(404, "Media type not valid.");
+    let media: any = "";
+
+    if (!userId) {
+      return next(errorHandler(401, "User not authenticated."));
     }
+
+    if (type === "image") {
+      media = await Image.findById(mediaId);
+    } else if (type === "video") {
+      media = await Video.findById(mediaId);
+    } else {
+      return next(errorHandler(404, "Can't find media."));
+    }
+
+    const userFound = media?.dislikes.includes(userId);
+    const updateDB = {
+      request: userFound ? "$pull" : "$push",
+      message: userFound
+        ? " User interaction is removed."
+        : " User interaction is added.",
+    };
+
+    const updateOperation = { [updateDB.request]: { dislikes: userId } };
+
+    const result = await (type === "image" ? Image : Video).updateOne(
+      { _id: mediaId },
+      updateOperation
+    );
+    if (result.modifiedCount === 0) {
+      return next(
+        errorHandler(404, "Media not found or user interaction not modified.")
+      );
+    }
+
+    return res.status(200).json({ result });
   } catch (error) {
     next(error);
   }

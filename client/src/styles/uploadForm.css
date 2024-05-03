@@ -1,0 +1,24 @@
+.uploadForm {
+  @apply m-5 p-10 space-y-7 flex-col;
+}
+
+.caption {
+  @apply h-12 p-3 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1  ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6;
+}
+
+.upload_Area {
+  @apply block w-full text-sm text-slate-500
+  file:mr-4 file:py-2 file:px-4 file:rounded-md
+  
+  shadow-none
+  file:border-0 file:text-sm file:font-semibold
+  file:bg-gray-100 file:text-blue-400
+  hover:file:bg-orange-100;
+}
+label {
+  @apply block text-sm font-medium text-gray-900;
+}
+
+button {
+  @apply h-10 w-full rounded-md text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
+}

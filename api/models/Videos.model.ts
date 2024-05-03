@@ -5,18 +5,21 @@ const videoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+    default: "video",
+  },
   videoName: {
     type: String,
     required: true,
   },
-  videoUrl: {
+  Url: {
     type: String,
-    required: true,
   },
   format: {
     type: String,
     required: true,
-    enum: ["mp4", "avi", "mov", "wmv", "mkv"],
+    enum: ["mp4"],
   },
   duration: {
     type: Number,
