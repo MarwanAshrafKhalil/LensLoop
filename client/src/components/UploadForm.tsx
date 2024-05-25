@@ -13,7 +13,7 @@ type userType = {
 export default function UploadForm() {
   const [file, setFile] = useState<File | null>();
   const [caption, setCaption] = useState<string>("");
-  const maxSize = 3;
+  const maxSize = 300;
 
   const userFetch = useAppSelector(
     (state) => state.user.currentUser
@@ -49,7 +49,8 @@ export default function UploadForm() {
 
   const fileSelected = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.size > maxSize) {
+    console.log(file?.size);
+    if (file && file.size > maxSize * 1024 * 1024) {
       alert(`File size exceeds the limit of ${maxSize}MB`);
     }
     setFile(file);
